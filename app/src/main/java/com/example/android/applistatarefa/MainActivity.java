@@ -1,7 +1,6 @@
 package com.example.android.applistatarefa;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,9 +11,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -68,12 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onLongItemClick(View view, int position) {
-                                Tarefa tarefa = listaTarefas.get(position);
-                                bd.execSQL("DELETE FROM tarefas WHERE id = " + tarefa.getId());
-                                listar();
-                                TarefaAdapter adapter = new TarefaAdapter(listaTarefas);
-                                rvTarefas.setAdapter(adapter);
-                                Toast.makeText(MainActivity.this, "Tarefa excluida.", Toast.LENGTH_SHORT).show();
+
+                                        Tarefa tarefa = listaTarefas.get(position);
+                                        bd.execSQL("DELETE FROM tarefas WHERE id = " + tarefa.getId());
+                                        listar();
+                                        TarefaAdapter adapter = new TarefaAdapter(listaTarefas);
+                                        rvTarefas.setAdapter(adapter);
+                                        Toast.makeText(MainActivity.this, "Tarefa excluida.", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -138,5 +138,29 @@ public class MainActivity extends AppCompatActivity {
         listar();
         TarefaAdapter adapter = new TarefaAdapter(listaTarefas);
         rvTarefas.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.total, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.itemSalvar:
+                Double total = 0.0;
+                for(Tarefa t: listaTarefas){
+                    total += t.getValor();
+                }
+                Toast.makeText(getApplicationContext(), total.toString(), Toast.LENGTH_LONG).show();
+
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity2 extends AppCompatActivity {
     private EditText edtTarefa;
+    private Button btnSalvar;
     private EditText edtData;
     private EditText edtValor;
     private SQLiteDatabase bd;
@@ -27,6 +30,7 @@ public class MainActivity2 extends AppCompatActivity {
         edtTarefa = findViewById(R.id.edtTarefa);
         edtData = findViewById(R.id.edtData);
         edtValor = findViewById(R.id.edtValor);
+        btnSalvar = findViewById(R.id.btnSalvar);
 
         try {
             bd = openOrCreateDatabase("tarefas", MODE_PRIVATE, null);
@@ -42,19 +46,9 @@ public class MainActivity2 extends AppCompatActivity {
             edtData.setText(tarefa.getData());
             edtValor.setText(tarefa.getValor().toString());
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tarefa, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.itemSalvar:
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 String nome = edtTarefa.getText().toString();
                 String data = edtData.getText().toString();
                 String valor = edtValor.getText().toString();
@@ -62,16 +56,17 @@ public class MainActivity2 extends AppCompatActivity {
                 if (tarefa != null){
                     bd.execSQL("UPDATE tarefas SET nome = ('" + nome + "')" +
                             "WHERE id = " + tarefa.getId());
-                    Toast.makeText(this, "Tarefa alterada com sucesso.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Tarefa alterada com sucesso.", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     bd.execSQL("INSERT INTO tarefas (nome, data, valor) " +
                             "VALUES ('" + nome + "' "+ virgula +" '"+ data +"' "+virgula+" '"+valor+"' )");
-                    Toast.makeText(this, "Tarefa gravada com sucesso.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Tarefa gravada com sucesso.", Toast.LENGTH_SHORT).show();
                 }
                 finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+            }
+        });
+
     }
+
 }
