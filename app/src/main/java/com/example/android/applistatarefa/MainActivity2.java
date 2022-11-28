@@ -39,6 +39,8 @@ public class MainActivity2 extends AppCompatActivity {
         if(bundle != null){
             tarefa = (Tarefa) bundle.getSerializable("tarefa");
             edtTarefa.setText(tarefa.getNome());
+            edtData.setText(tarefa.getData());
+            edtValor.setText(tarefa.getValor().toString());
         }
     }
 
@@ -50,17 +52,21 @@ public class MainActivity2 extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.itemSalvar:
                 String nome = edtTarefa.getText().toString();
+                String data = edtData.getText().toString();
+                String valor = edtValor.getText().toString();
+                String virgula = ",";
                 if (tarefa != null){
                     bd.execSQL("UPDATE tarefas SET nome = ('" + nome + "')" +
                             "WHERE id = " + tarefa.getId());
                     Toast.makeText(this, "Tarefa alterada com sucesso.", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    bd.execSQL("INSERT INTO tarefas (nome) " +
-                            "VALUES ('" + nome + "')");
+                    bd.execSQL("INSERT INTO tarefas (nome, data, valor) " +
+                            "VALUES ('" + nome + "' "+ virgula +" '"+ data +"' "+virgula+" '"+valor+"' )");
                     Toast.makeText(this, "Tarefa gravada com sucesso.", Toast.LENGTH_SHORT).show();
                 }
                 finish();

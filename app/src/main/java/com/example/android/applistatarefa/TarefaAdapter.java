@@ -29,6 +29,8 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.MyViewHold
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Tarefa tarefa = listaTarefas.get(position);
         holder.tvNome.setText(tarefa.getNome());
+        holder.tvData.setText(tarefa.getData());
+        holder.tvValor.setText(tarefa.getValor().toString());
     }
 
     @Override
@@ -39,11 +41,15 @@ public class TarefaAdapter extends RecyclerView.Adapter<TarefaAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvNome;
+        TextView tvData;
+        TextView tvValor;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvNome = itemView.findViewById(R.id.tvNome);
+            tvData = itemView.findViewById(R.id.tvData);
+            tvValor = itemView.findViewById(R.id.tvValor);
         }
     }
 

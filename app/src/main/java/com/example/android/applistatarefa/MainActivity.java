@@ -97,23 +97,31 @@ public class MainActivity extends AppCompatActivity {
     public void criarTabela(){
         try {
             bd.execSQL("CREATE TABLE IF NOT EXISTS tarefas (id INTEGER PRIMARY KEY autoincrement, nome VARCHAR)");
+            bd.execSQL("ALTER TABLE tarefas ADD COLUMN data VARCHAR");
+            bd.execSQL("ALTER TABLE tarefas ADD COLUMN valor REAL");
         }catch (Exception e){
+
             e.printStackTrace();
         }
     }
 
     public void listar() {
         try {
-            String consulta = "SELECT id, nome FROM tarefas";
+            String consulta = "SELECT id, nome, data, valor FROM tarefas";
             Cursor cursor = bd.rawQuery(consulta, null);
             int indiceId = cursor.getColumnIndex("id");
             int indiceNome = cursor.getColumnIndex("nome");
+            int indiceData = cursor.getColumnIndex("data");
+            int indiceValor = cursor.getColumnIndex("valor");
+
             cursor.moveToFirst();
             listaTarefas.clear();
             while (cursor != null) {
                 int id = cursor.getInt(indiceId);
                 String nome = cursor.getString(indiceNome);
-                Tarefa tarefa = new Tarefa (id, nome);
+                String data = cursor.getString(indiceData);
+                Double valor = cursor.getDouble(indiceValor);
+                Tarefa tarefa = new Tarefa (id, nome, data, valor);
                 listaTarefas.add(tarefa);
                 cursor.moveToNext();
 
