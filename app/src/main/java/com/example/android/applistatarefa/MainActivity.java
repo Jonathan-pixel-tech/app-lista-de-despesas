@@ -1,11 +1,13 @@
 package com.example.android.applistatarefa;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -68,12 +70,40 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onLongItemClick(View view, int position) {
 
+                                AlertDialog.Builder dialog = new AlertDialog.Builder( MainActivity.this );
+
+                                dialog.setTitle("Confirmar exclusão");
+                                dialog.setMessage("Realmente deseja excluir a despesa?");
+
+                                dialog.setCancelable(false);
+                                dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
                                         Tarefa tarefa = listaTarefas.get(position);
                                         bd.execSQL("DELETE FROM tarefas WHERE id = " + tarefa.getId());
                                         listar();
                                         TarefaAdapter adapter = new TarefaAdapter(listaTarefas);
                                         rvTarefas.setAdapter(adapter);
-                                        Toast.makeText(MainActivity.this, "Tarefa excluida.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Tarefa excluida.", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+                                dialog.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        Toast.makeText(getApplicationContext(), "OK! A tarefa não foi excluida.", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+                                dialog.create();
+                                dialog.show();
+
+
+
                             }
 
                             @Override
